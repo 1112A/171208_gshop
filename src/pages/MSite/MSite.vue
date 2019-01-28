@@ -61,15 +61,7 @@ export default {
 	mounted(){
 		
 		this.$store.dispatch('getCategorys')
-	
-	
-	
-		new Swiper('.swiper-container',{
-			loop:true,
-			pagination: {
-      		  el: '.swiper-pagination',
-    		},
-		})
+
 	},
 	
 	computed:{
@@ -91,6 +83,24 @@ export default {
 				 
 			})
 			return arr
+		}
+	},
+	
+	watch:{
+		categorys(value){
+			/*setTimeout(()=>{
+				
+			},100)*/
+			
+			
+			this.$nextTick(()=>{
+				new Swiper('.swiper-container',{
+					loop:true,
+					pagination: {
+					  el: '.swiper-pagination',
+					},
+				})
+			})
 		}
 	},
 	
