@@ -6,6 +6,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import './mock/mockServer'
+
 Vue.config.productionTip = false
 Vue.component(Button.name,Button)
 
