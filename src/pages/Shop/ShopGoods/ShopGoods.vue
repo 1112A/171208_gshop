@@ -1,9 +1,11 @@
 ﻿<template>
 	<div>
 		<div class="goods">
-			<div class="menu-wrapper" ref="menuWrapper">
+		
+		  
+			<div class="menu-wrapper">
 				<ul>
-					<li class="menu-item" v-for="(good, index) in goods" :key="index">
+					<li class="menu-item" v-for="(good, index) in goods" :key="index" :class="{current:index === currentIndex}" @click="clickMenuItem(index)">
 						<span class="text bottom-border-1px">
 							<img class="icon" :src="good.icon" v-if="good.icon">
 							{{good.name}}
@@ -12,8 +14,8 @@
 					
 				</ul>
 			</div>
-			<div class="foods-wrapper" ref="foodsWrapper">
-				<ul>
+			<div class="foods-wrapper">
+				<ul ref="foodsUl">
 					<li class="food-list-hook" v-for="(good, index) in goods" :key="index">
 						<h1 class="title">{{good.name}}</h1>
 						<ul>
@@ -49,14 +51,81 @@
 </template>
 
 <script>
-
+import BScroll from 'better-scroll'
 import {mapState} from 'vuex'
+
 export default {
+	data(){
+		return {
+			scrollY:0,
+			tops:[],
+		}
+	},
 	mounted(){
-		this.$store.dispatch('getShopGoods')
+		this.$store.dispatch('getShopGoods',() => {
+			this.$nextTick(()=>{
+				
+				this._initScroll()
+				this._initTops()
+			})
+		})
 	},
 	computed:{
-		...mapState(['goods'])
+		...mapState(['goods']),
+		currentIndex(){
+			const {scrollY,tops} = this
+			const index = tops.findIndex((top,index) => {
+				//scrollY >= top && scrollY < top
+				return scrollY >= top && scrollY < tops[index+1]
+			})
+			return index
+		}
+	},
+	
+	methods : {
+		_initScroll(){
+			new BScroll('.menu-wrapper',{
+				click : true	
+			})
+			this.foodsScroll = new BScroll('.foods-wrapper',{
+				probeType : 2, //不会惯性而滑动
+				click : true
+			})
+				
+			this.foodsScroll.on('scroll',({x,y}) => {
+				//console.log(x,y)
+				this.scrollY = Math.abs(y)
+			})
+			
+			this.foodsScroll.on('scrollEnd',({x,y}) => {
+				console.log('scrollEnd',x,y)
+				this.scrollY = Math.abs(y)
+			})
+			
+			
+		},
+		
+		_initTops(){
+			const tops = []
+			let top = 0
+			tops.push(top)
+			
+			const lis = this.$refs.foodsUl.getElementsByClassName('food-list-hook')
+			Array.prototype.slice.call(lis).forEach(li => {
+				top += li.clientHeight
+				tops.push(top)
+			})
+			this.tops = tops
+			console.log(tops)
+		},
+		
+		clickMenuItem(index){
+			//console.log(index)
+			const scrollY = this.tops[index]
+			
+			this.scrollY = scrollY //点击时立即更新选中样式
+			this.foodsScroll.scrollTo(0, -scrollY, 300)
+		}
 	}
  
 }
