@@ -1,4 +1,4 @@
-import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_USER_INFO,RESET_USER_INFO,RECEIVE_INFO,RECEIVE_RATINGS,RECEIVE_GOODS} from './mutation-types'
+import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_USER_INFO,RESET_USER_INFO,RECEIVE_INFO,RECEIVE_RATINGS,RECEIVE_GOODS,INCREMENT_FOOD_COUNT,DECREMENT_FOOD_COUNT} from './mutation-types'
 import {reqAddress,reqFoodCategorys,reqShops,reqUserInfo,reqLogout,reqShopGoods,reqShopInfo,reqShopRatings} from '../api'
 export default{
 	async getAddress({commit,state}){
@@ -78,5 +78,13 @@ export default{
 				commit(RECEIVE_GOODS, {goods})
 				callback && callback()
 			}
-		},
-	}
+	},
+	
+	updateFoodCount ({commit},{isAdd,food}){
+		if(isAdd){
+			commit(INCREMENT_FOOD_COUNT,{food})	
+		}else{
+			commit(DECREMENT_FOOD_COUNT,{food})		
+		}
+	}		
+}
