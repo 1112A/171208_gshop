@@ -20,34 +20,34 @@
 			</div>
 			
 			<transition name="swipe">
-			<div class="shopcart-list" v-show="listShow">
-				<div class="list-header">
-					<h1 class="title">购物车</h1>
-					<span class="empty">清空</span>
+				<div class="shopcart-list" v-show="listShow">
+					<div class="list-header">
+						<h1 class="title">购物车</h1>
+						<span class="empty">清空</span>
+					</div>
+					<div class="list-content">
+						<ul>
+							<li class="food" v-for="(food,index) in cartFoods" :key="index">
+								<span class="name">{{food.name}}</span>
+								<div class="price"><span>￥{{food.price}}</span></div>
+								<div class="cartcontrol-wrapper">
+									<CartControl :food="food"/>			
+								</div>
+								
+							</li>
+						</ul>
+					</div>
 				</div>
-				<div class="list-content">
-					<ul>
-						<li class="food" v-for="(food,index) in cartFoods" :key="index">
-							<span class="name">{{food.name}}</span>
-							<div class="price"><span>￥{{food.price}}</span></div>
-							<div class="cartcontrol-wrapper">
-								<CartControl :food="food"/>			
-							</div>
-							
-						</li>
-					</ul>
-				</div>
-			</div>
 			</transition>
 		</div>
-	<transition name="fade">
-     <div class="list-mask" v-show="listShow" @click="toggleShow"></div>
+	 <transition name="fade">
+     	<div class="list-mask" v-show="listShow" @click="toggleShow"></div>
 	 </transition>
 </div>
 </template>
 
 <script>
-
+import BScroll from 'better-scroll'
 import {mapState,mapGetters} from 'vuex'
 import CartControl from '../CartControl/CartControl.vue'
 export default {
@@ -82,6 +82,19 @@ export default {
 				this.isShow = false
 				return false
 			}
+			
+			if(this.isShow){
+				this.$nextTick(() => {
+					if(!this.scroll){
+						this.scroll = new BScroll('.list-content',{
+							click:true
+						})
+					}else{
+						this.scroll.refresh()
+					}
+				})
+			}
+			
 			return this.isShow
 		}
 	},
@@ -208,7 +221,7 @@ export default {
        top 0
        z-index -1
        width 100%
-       transform translateY(-100%)
+       transform translateY(-100%) 
        &.swipe-enter-active, &.swipe-leave-active
          transition transform .3s
        &.swipe-enter, &.swipe-leave-to
