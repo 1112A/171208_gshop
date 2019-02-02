@@ -89,7 +89,7 @@ export default {
 	methods:{
 		toggleShow () {
 			if(this.totalCount > 0){
-				this.isShow = !this.isShow
+				this.isShow = !this.isShow 
 			}
 		}
 	},
