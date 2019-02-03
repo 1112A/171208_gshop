@@ -1,4 +1,4 @@
-import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_USER_INFO,RESET_USER_INFO,RECEIVE_INFO,RECEIVE_RATINGS,RECEIVE_GOODS,INCREMENT_FOOD_COUNT,DECREMENT_FOOD_COUNT} from './mutation-types'
+import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_USER_INFO,RESET_USER_INFO,RECEIVE_INFO,RECEIVE_RATINGS,RECEIVE_GOODS,INCREMENT_FOOD_COUNT,DECREMENT_FOOD_COUNT,CLEAR_CART} from './mutation-types'
 import {reqAddress,reqFoodCategorys,reqShops,reqUserInfo,reqLogout,reqShopGoods,reqShopInfo,reqShopRatings} from '../api'
 export default{
 	async getAddress({commit,state}){
@@ -63,11 +63,12 @@ export default{
 		}
 	},
 // 异步获取商家评价列表
-	async getShopRatings({commit}) {
+	async getShopRatings({commit},callback) {
 		const result = await reqShopRatings()
 		if(result.code===0) {
 			const ratings = result.data
 			commit(RECEIVE_RATINGS, {ratings})
+			callback && callback()
 		}
 	},
 		// 异步获取商家商品列表
@@ -86,5 +87,9 @@ export default{
 		}else{
 			commit(DECREMENT_FOOD_COUNT,{food})		
 		}
-	}		
+	},
+	
+	clearCart ({commit}){
+		commit(CLEAR_CART)	
+	}
 }

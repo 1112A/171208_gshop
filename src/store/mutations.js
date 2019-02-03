@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_USER_INFO,RESET_USER_INFO,RECEIVE_INFO,RECEIVE_RATINGS,RECEIVE_GOODS,INCREMENT_FOOD_COUNT,DECREMENT_FOOD_COUNT} from './mutation-types'
+import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_USER_INFO,RESET_USER_INFO,RECEIVE_INFO,RECEIVE_RATINGS,RECEIVE_GOODS,INCREMENT_FOOD_COUNT,DECREMENT_FOOD_COUNT,CLEAR_CART} from './mutation-types'
 export default{
 	[RECEIVE_ADDRESS](state,{address}){
 		state.address = address	
@@ -43,4 +43,11 @@ export default{
 			}
 		}
 	},
+	[CLEAR_CART](state) {
+		
+		state.cartFoods.forEach(food => food.count = 0)
+		
+		state.cartFoods = []
+	},
+	
 }
