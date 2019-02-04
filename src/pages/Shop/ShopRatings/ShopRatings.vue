@@ -60,7 +60,7 @@
 								<span class="item" v-for="(item,index) in rating.recommend" :key="index">{{item}}</span>
 								
 							</div>
-							<div class="time">{{rating.rateTime}}</div>
+							<div class="time">{{rating.rateTime | date-format}}</div>
 							</div>
 						</li>
 						
@@ -242,7 +242,7 @@ export default {
           display: inline
           vertical-align: top
           font-size: 12px
-
+          width 100%
      .rating-wrapper
        padding: 0 18px
        .rating-item
@@ -279,12 +279,13 @@ export default {
                font-size: 10px
                color: rgb(147, 153, 159)
            .text
-             margin-bottom: 8px
+             padding-bottom: 8px
              line-height: 18px
              color: rgb(7, 17, 27)
              font-size: 12px
              overflow:hidden
              clear:left
+             width 100%
            .recommend
              line-height: 16px
              font-size: 0
